@@ -42,8 +42,8 @@ def craw_journal(url, keyword):
     return volumes
 
 
-def write_journal(file, year, volume_id, papers):
-    with open(file, 'a') as f:
+def write_journal(year, volume_id, papers):
+    with open('journal.md', 'a') as f:
         # year = year.replace('\n', '')
         f.write('## [%s\t%s]\n' % (year.split('\n')[0], volume_id.strip()))
         for paper in papers:

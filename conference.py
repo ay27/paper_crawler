@@ -39,8 +39,8 @@ def craw_conference(url, keyword):
     return conferences
 
 
-def write_conference(file, workshop_title, papers):
-    with open(file, 'a') as f:
+def write_conference(workshop_title, papers):
+    with open('conference.md', 'a') as f:
         # year = year.replace('\n', '')
         f.write('## [%s]\n' % workshop_title)
         for paper in papers:

@@ -38,7 +38,7 @@ if __name__ == '__main__':
         with open(result_file, 'a') as f:
             f.write('# %s\n' % journal)
         for volume in volumes:
-            write_journal(result_file, volume[0], volume[1], volume[3])
+            write_journal(volume[0], volume[1], volume[3])
 
     conference_list = read_config('config.ini', 'conference')
     for conf in conference_list:
@@ -46,4 +46,4 @@ if __name__ == '__main__':
         with open(result_file, 'a') as f:
             f.write('# %s\n' % conf)
         for workshop in workshops:
-            write_conference(result_file, workshop[0], workshop[1])
+            write_conference(workshop[0], workshop[1])
