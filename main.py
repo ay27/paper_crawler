@@ -2,6 +2,7 @@
 import os, sys
 from conference import *
 from journal import *
+from multiprocessing import Process
 
 
 def read_config(file_path, type_str):
@@ -23,17 +24,29 @@ def read_config(file_path, type_str):
     return result
 
 
+def main1(keyword):
+    conference_list = read_config('config.ini', 'conference')
+    for conf in conference_list:
+        craw_conference(conf, keyword)
+
+
+def main2(keyword):
+    journal_list = read_config('config.ini', 'journal')
+    for journal in journal_list:
+        craw_journal(journal, keyword)
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print('Usage: paper_crawler keyword')
         exit(1)
 
     keyword = sys.argv[1]
-    conference_list = read_config('config.ini', 'conference')
-    for conf in conference_list:
-        craw_conference(conf, keyword)
+    p1 = Process(target=main1, args=(keyword,))
+    p1.start()
 
-    journal_list = read_config('config.ini', 'journal')
-    for journal in journal_list:
-        volumes = craw_journal(journal, keyword)
+    p2 = Process(target=main2, args=(keyword,))
+    p2.start()
 
+    p1.join()
+    p2.join()
