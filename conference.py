@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 def check(keyword, title):
     # return True
-    return keyword in title
+    return keyword.strip().lower() in title.strip().lower()
 
 
 def craw_workshop(href, keyword):
