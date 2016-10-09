@@ -3,7 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def craw_volume(href):
+def check(keyword, title):
+    return keyword in title
+
+
+def craw_volume(href, keyword):
     volume_page = requests.get(href)
     ss = BeautifulSoup(volume_page.text, 'lxml')
     uls = ss.find_all(attrs={'class': 'publ-list'})
@@ -18,7 +22,8 @@ def craw_volume(href):
                 for author in data.find_all('span', attrs={'itemprop': 'author'}):
                     authors.append(author.text)
                 paper_href = li.find('nav', attrs={'class': 'publ'}).ul.li.div.a.attrs['href']
-                volume_papers.append([title, authors, paper_href])
+                if check(keyword, title):
+                    volume_papers.append([title, authors, paper_href])
             except:
                 continue
 
@@ -38,7 +43,7 @@ def craw_journal(url, keyword):
     # volumes[0].append(craw_volume(volumes[0][2]))
     # return volumes
     for volume in volumes:
-        volume.append(craw_volume(volume[2]))
+        volume.append(craw_volume(volume[2], keyword))
     return volumes
 
 

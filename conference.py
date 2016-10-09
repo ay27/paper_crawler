@@ -3,7 +3,10 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def craw_workshop(href):
+def check(keyword, title):
+    return keyword in title
+
+def craw_workshop(href, keyword):
     workshop_page = requests.get(href)
     ss = BeautifulSoup(workshop_page.text, 'lxml')
     uls = ss.find_all(attrs={'class': 'publ-list'})
@@ -18,7 +21,8 @@ def craw_workshop(href):
                 for author in data.find_all('span', attrs={'itemprop': 'author'}):
                     authors.append(author.text)
                 paper_href = li.find('nav', attrs={'class': 'publ'}).ul.li.div.a.attrs['href']
-                workshop_papers.append([title, authors, paper_href])
+                if check(keyword, title):
+                    workshop_papers.append([title, authors, paper_href])
             except:
                 continue
     return workshop_papers
@@ -35,7 +39,9 @@ def craw_conference(url, keyword):
             data = li.find('div', attrs={'class': 'data'})
             workshop_title = data.find('span', attrs={'class': 'title'}).text
             workshop_href = data.find('a', text='[contents]').attrs['href']
-            conferences.append([workshop_title, craw_workshop(workshop_href)])
+            conferences.append([workshop_title, craw_workshop(workshop_href, keyword)])
+            break
+        break
     return conferences
 
 
