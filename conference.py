@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 
 
 def check(keyword, title):
-    return keyword in title
+    return True
+    # return keyword in title
 
 def craw_workshop(href, keyword):
     workshop_page = requests.get(href)
@@ -13,7 +14,7 @@ def craw_workshop(href, keyword):
 
     workshop_papers = []
     for ul in uls:
-        for li in ul.find_all('li', attrs={'class': 'entry editor'}):
+        for li in ul.find_all('li', attrs={'class': 'entry inproceedings'}):
             try:
                 data = li.find('div', attrs={'class': 'data'})
                 title = data.find('span', attrs={'class': 'title'}).text
