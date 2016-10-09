@@ -3,8 +3,6 @@ import os, sys
 from conference import *
 from journal import *
 
-result_file = 'result.md'
-
 
 def read_config(file_path, type_str):
     with open(file_path, encoding='utf-8') as f:
@@ -32,19 +30,17 @@ if __name__ == '__main__':
 
     keyword = sys.argv[1]
     conference_list = read_config('config.ini', 'conference')
-    # for conf in conference_list:
-    workshops = craw_conference(conference_list[0], keyword)
-    with open(result_file, 'a') as f:
-        f.write('# %s\n' % conference_list[0])
-    for workshop in workshops:
-        write_conference(workshop[0], workshop[1])
+    for conf in conference_list:
+        workshops = craw_conference(conf, keyword)
+        with open('conference.md', 'a') as f:
+            f.write('# %s\n' % conf)
+        for workshop in workshops:
+            write_conference(workshop[0], workshop[1])
 
-
-    # journal_list = read_config('config.ini', 'journal')
-    # for journal in journal_list:
-    #     volumes = craw_journal(journal, keyword)
-    #     with open(result_file, 'a') as f:
-    #         f.write('# %s\n' % journal)
-    #     for volume in volumes:
-    #         write_journal(volume[0], volume[1], volume[3])
-
+    journal_list = read_config('config.ini', 'journal')
+    for journal in journal_list:
+        volumes = craw_journal(journal, keyword)
+        with open('journal.md', 'a') as f:
+            f.write('# %s\n' % journal)
+        for volume in volumes:
+            write_journal(volume[0], volume[1], volume[3])

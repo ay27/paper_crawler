@@ -7,6 +7,7 @@ def check(keyword, title):
     return True
     # return keyword in title
 
+
 def craw_workshop(href, keyword):
     workshop_page = requests.get(href)
     ss = BeautifulSoup(workshop_page.text, 'lxml')
@@ -41,8 +42,6 @@ def craw_conference(url, keyword):
             workshop_title = data.find('span', attrs={'class': 'title'}).text
             workshop_href = data.find('a', text='[contents]').attrs['href']
             conferences.append([workshop_title, craw_workshop(workshop_href, keyword)])
-            break
-        break
     return conferences
 
 
