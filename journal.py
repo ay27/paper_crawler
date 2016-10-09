@@ -44,7 +44,10 @@ def craw_journal(url, keyword):
     # return volumes
     for volume in volumes:
         volume.append(craw_volume(volume[2], keyword))
-    return volumes
+    with open('journal.md', 'a') as f:
+        f.write('# %s\n' % url)
+    for volume in volumes:
+        write_journal(volume[0], volume[1], volume[3])
 
 
 def write_journal(year, volume_id, papers):

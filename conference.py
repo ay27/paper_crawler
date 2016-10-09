@@ -42,7 +42,10 @@ def craw_conference(url, keyword):
             workshop_title = data.find('span', attrs={'class': 'title'}).text
             workshop_href = data.find('a', text='[contents]').attrs['href']
             conferences.append([workshop_title, craw_workshop(workshop_href, keyword)])
-    return conferences
+    with open('conference.md', 'a') as f:
+        f.write('\n\n---\n# %s\n' % url)
+    for workshop in conferences:
+        write_conference(workshop[0], workshop[1])
 
 
 def write_conference(workshop_title, papers):
