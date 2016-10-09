@@ -8,7 +8,13 @@ def check(keyword, title):
 
 
 def craw_volume(href, keyword):
-    volume_page = requests.get(href)
+    flag = True
+    while flag:
+        flag = False
+        try:
+            volume_page = requests.get(href)
+        except:
+            flag = True
     ss = BeautifulSoup(volume_page.text, 'lxml')
     uls = ss.find_all(attrs={'class': 'publ-list'})
 
@@ -31,7 +37,13 @@ def craw_volume(href, keyword):
 
 
 def craw_journal(url, keyword):
-    release_page = requests.get(url)
+    flag = True
+    while flag:
+        flag = False
+        try:
+            release_page = requests.get(url)
+        except:
+            flag = True
     soup = BeautifulSoup(release_page.text, "lxml")
 
     ul_tag = soup.find_all('ul')[12]
@@ -44,9 +56,13 @@ def craw_journal(url, keyword):
     # return volumes
     for volume in volumes:
         volume.append(craw_volume(volume[2], keyword))
+    if len(volumes) < 1:
+        return
     with open('journal.md', 'a') as f:
         f.write('# %s\n' % url)
     for volume in volumes:
+        if len(volume[3]) < 1:
+            continue
         write_journal(volume[0], volume[1], volume[3])
 
 

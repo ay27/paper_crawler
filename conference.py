@@ -4,12 +4,17 @@ from bs4 import BeautifulSoup
 
 
 def check(keyword, title):
-    # return True
     return keyword.strip().lower() in title.strip().lower()
 
 
 def craw_workshop(href, keyword):
-    workshop_page = requests.get(href)
+    flag = True
+    while flag:
+        flag = False
+        try:
+            workshop_page = requests.get(href)
+        except:
+            flag = True
     ss = BeautifulSoup(workshop_page.text, 'lxml')
     uls = ss.find_all(attrs={'class': 'publ-list'})
 
@@ -31,7 +36,13 @@ def craw_workshop(href, keyword):
 
 
 def craw_conference(url, keyword):
-    conf_page = requests.get(url)
+    flag = True
+    while flag:
+        flag = False
+        try:
+            conf_page = requests.get(url)
+        except:
+            flag = True
     soup = BeautifulSoup(conf_page.text, 'lxml')
 
     conferences = []
@@ -42,9 +53,13 @@ def craw_conference(url, keyword):
             workshop_title = data.find('span', attrs={'class': 'title'}).text
             workshop_href = data.find('a', text='[contents]').attrs['href']
             conferences.append([workshop_title, craw_workshop(workshop_href, keyword)])
+    if len(conferences) < 1:
+        return
     with open('conference.md', 'a') as f:
         f.write('\n\n---\n# %s\n' % url)
     for workshop in conferences:
+        if len(workshop[1]) < 1:
+            continue
         write_conference(workshop[0], workshop[1])
 
 
