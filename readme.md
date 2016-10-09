@@ -12,7 +12,7 @@ pip3 install -r requirements.txt
 
 ### 2. 在config.ini文件中填入需要爬取的期刊、会议链接
 
-如需要爬取人工智能A类期刊、会议论文，则这样填写（相应链接可以从这个页面找到http://www.ccf.org.cn/sites/ccf/biaodan.jsp?contentId=2903940690839）：
+如需要爬取人工智能A类期刊、会议论文，则这样填写（相应链接可以从这个页面找到 <http://www.ccf.org.cn/sites/ccf/biaodan.jsp?contentId=2903940690839> ）：
 
 ```
 [journal]
