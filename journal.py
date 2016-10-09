@@ -1,6 +1,9 @@
 # Created by ay27 at 16/10/9
 import requests
+import time
 from bs4 import BeautifulSoup
+
+now_year = int(time.localtime(time.time()).tm_year)
 
 
 def check(keyword, title):
@@ -36,7 +39,14 @@ def craw_volume(href, keyword):
     return volume_papers
 
 
-def craw_journal(url, keyword):
+def check_year(start_year, volume_year):
+    for year in range(start_year, now_year + 1):
+        if str(year) in volume_year:
+            return True
+    return False
+
+
+def craw_journal(url, start_year, keyword):
     flag = True
     while flag:
         flag = False
@@ -50,6 +60,8 @@ def craw_journal(url, keyword):
     volumes = []
     for li in ul_tag.find_all('li'):
         for a in li.find_all('a'):
+            if not check_year(start_year, li.text):
+                continue
             volumes.append([li.text, a.text, a.attrs['href']])
 
     # volumes[0].append(craw_volume(volumes[0][2]))

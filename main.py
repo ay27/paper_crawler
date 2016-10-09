@@ -24,28 +24,32 @@ def read_config(file_path, type_str):
     return result
 
 
-def main1(keyword):
+def main1(start_year, keyword):
     conference_list = read_config('config.ini', 'conference')
     for conf in conference_list:
-        craw_conference(conf, keyword)
+        craw_conference(conf, start_year, keyword)
 
 
-def main2(keyword):
+def main2(start_year, keyword):
     journal_list = read_config('config.ini', 'journal')
     for journal in journal_list:
-        craw_journal(journal, keyword)
+        craw_journal(journal, start_year, keyword)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: paper_crawler keyword')
+    if len(sys.argv) < 3:
+        print('Usage: paper_crawler start-year keyword')
         exit(1)
 
-    keyword = sys.argv[1]
-    p1 = Process(target=main1, args=(keyword,))
+    start_year = int(sys.argv[1])
+    keyword = sys.argv[2]
+    for ii in range(3, len(sys.argv)):
+        keyword += ' ' + sys.argv[ii]
+
+    p1 = Process(target=main1, args=(start_year, keyword,))
     p1.start()
 
-    p2 = Process(target=main2, args=(keyword,))
+    p2 = Process(target=main2, args=(start_year, keyword,))
     p2.start()
 
     p1.join()

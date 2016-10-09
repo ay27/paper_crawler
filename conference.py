@@ -1,6 +1,10 @@
 # Created by ay27 at 16/10/9
 import requests
 from bs4 import BeautifulSoup
+import time
+
+
+now_year = int(time.localtime(time.time()).tm_year)
 
 
 def check(keyword, title):
@@ -35,7 +39,14 @@ def craw_workshop(href, keyword):
     return workshop_papers
 
 
-def craw_conference(url, keyword):
+def check_year(start_year, workshop_title):
+    for year in range(start_year, now_year+1):
+        if str(year) in workshop_title:
+            return True
+    return False
+
+
+def craw_conference(url, start_year, keyword):
     flag = True
     while flag:
         flag = False
@@ -51,6 +62,8 @@ def craw_conference(url, keyword):
         for li in ul.find_all('li', attrs={'class': 'entry editor'}):
             data = li.find('div', attrs={'class': 'data'})
             workshop_title = data.find('span', attrs={'class': 'title'}).text
+            if not check_year(start_year, workshop_title):
+                continue
             workshop_href = data.find('a', text='[contents]').attrs['href']
             conferences.append([workshop_title, craw_workshop(workshop_href, keyword)])
     if len(conferences) < 1:
